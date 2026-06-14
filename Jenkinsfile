@@ -5,6 +5,11 @@ pipeline {
         CI = 'true'
     }
 
+    tools {
+        // Must match the name you set in Manage Jenkins > Global Tool Configuration > Allure Commandline
+        allure 'allure'
+    }
+
     stages {
 
         stage('Checkout') {
@@ -30,7 +35,7 @@ pipeline {
 
         stage('Generate Allure Report') {
             steps {
-                // Requires the Allure Jenkins plugin + Allure CLI on the agent PATH
+                // Requires the Allure Jenkins plugin + Allure Commandline tool configured
                 allure([
                     includeProperties: false,
                     jdk              : '',
