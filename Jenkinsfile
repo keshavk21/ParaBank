@@ -1,13 +1,8 @@
 pipeline {
-    agent any  // Run on whichever agent is available
+    agent any
 
     environment {
         CI = 'true'
-    }
-
-    tools {
-        // Must match the name you set in Manage Jenkins > Global Tool Configuration > Allure Commandline
-        allure 'allure'
     }
 
     stages {
@@ -20,28 +15,19 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                bat 'npm install'
-                bat 'npx playwright install chromium --with-deps'
+                bat 'npm ci'
+            }
+        }
+
+        stage('Install Playwright Browsers') {
+            steps {
+                bat 'npx playwright install'
             }
         }
 
         stage('Run Playwright Tests') {
             steps {
-                // Wipe previous results so old data doesn't bleed in
-                bat 'if exist allure-results rmdir /s /q allure-results'
                 bat 'npx playwright test'
-            }
-        }
-
-        stage('Generate Allure Report') {
-            steps {
-                // Requires the Allure Jenkins plugin + Allure Commandline tool configured
-                allure([
-                    includeProperties: false,
-                    jdk              : '',
-                    reportBuildPolicy: 'ALWAYS',
-                    results          : [[path: 'allure-results']]
-                ])
             }
         }
 
@@ -49,11 +35,8 @@ pipeline {
 
     post {
         always {
-            // Archive the raw Allure results as a fallback
-            archiveArtifacts artifacts: 'allure-results/**', allowEmptyArchive: true
-
-            // Archive the Playwright HTML report as well
-            archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+            // Archive screenshots and HTML reports
+            archiveArtifacts artifacts: 'screenshot/**, playwright-report/**', allowEmptyArchive: true
         }
 
         success {
@@ -61,7 +44,7 @@ pipeline {
         }
 
         failure {
-            echo 'Some tests failed. Check the Allure report for details.'
+            echo 'Some tests failed. Check the archived playwright-report for details.'
         }
     }
 }
