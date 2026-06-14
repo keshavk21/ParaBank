@@ -1,0 +1,15 @@
+{
+    "validData":{
+        "type":"valid data for registration",
+        "firstName": "Keshav",
+        "lastName": "Khandelwal",
+        "address": "JECRC University",
+        "city":"Jaipur",
+        "state": "Rajasthan",
+        "zipCode":"305601",
+        "phoneNo":"7999809463",
+        "ssn":"2323",
+        "userName":"Keshav331122",
+        "password":"Keshav331122"
+    }
+}
