@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        label 'windows'  // Targets a Windows Jenkins agent
-    }
+    agent any  // Run on whichever agent is available
 
     environment {
         CI = 'true'
