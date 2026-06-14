@@ -5,7 +5,6 @@ pipeline {
 
     environment {
         CI = 'true'
-        NODE_VERSION = '20'
     }
 
     stages {
@@ -25,7 +24,21 @@ pipeline {
 
         stage('Run Playwright Tests') {
             steps {
-                bat 'npx playwright test --reporter=html'
+                // Wipe previous results so old data doesn't bleed in
+                bat 'if exist allure-results rmdir /s /q allure-results'
+                bat 'npx playwright test'
+            }
+        }
+
+        stage('Generate Allure Report') {
+            steps {
+                // Requires the Allure Jenkins plugin + Allure CLI on the agent PATH
+                allure([
+                    includeProperties: false,
+                    jdk              : '',
+                    reportBuildPolicy: 'ALWAYS',
+                    results          : [[path: 'allure-results']]
+                ])
             }
         }
 
@@ -33,11 +46,11 @@ pipeline {
 
     post {
         always {
-            // Archive the HTML report
-            archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
+            // Archive the raw Allure results as a fallback
+            archiveArtifacts artifacts: 'allure-results/**', allowEmptyArchive: true
 
-            // Archive test results and traces
-            archiveArtifacts artifacts: 'reports/**', allowEmptyArchive: true
+            // Archive the Playwright HTML report as well
+            archiveArtifacts artifacts: 'playwright-report/**', allowEmptyArchive: true
         }
 
         success {
@@ -45,7 +58,7 @@ pipeline {
         }
 
         failure {
-            echo 'Some tests failed. Check the Playwright HTML report in the artifacts.'
+            echo 'Some tests failed. Check the Allure report for details.'
         }
     }
 }
