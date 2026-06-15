@@ -17,6 +17,5 @@ export class Login{
         await this.userName.fill(userData.userName)
         await this.password.fill(userData.password)
         await this.login.click()
-        // await expect(this.page.locator('//p[@class="smallText"]/b')).toContainText("Welcome")
     }
 }

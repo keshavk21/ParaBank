@@ -23,7 +23,6 @@ test('TC-API-NEG-03: GET account with non-existent account ID should return 400'
   const response = await request.get(`${BASE_URL}/accounts/0000000`, {
     headers: { Accept: 'application/json' },
   });
-
   expect(response.status()).toBe(400);
 });
 
@@ -31,6 +30,5 @@ test('TC-API-NEG-04: GET account with invalid (non-numeric) account ID should re
   const response = await request.get(`${BASE_URL}/accounts/invalid-id`, {
     headers: { Accept: 'application/json' },
   });
-
   expect(response.status()).toBe(404);
 });

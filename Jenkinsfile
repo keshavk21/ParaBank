@@ -35,8 +35,8 @@ pipeline {
 
     post {
         always {
-            // Archive screenshots and HTML reports
-            archiveArtifacts artifacts: 'screenshot/**, playwright-report/**', allowEmptyArchive: true
+            // Archive screenshots, videos, HTML report, and Allure results
+            archiveArtifacts artifacts: 'screenshot/**, playwright-report/**, allure-results/**', allowEmptyArchive: true
         }
 
         success {

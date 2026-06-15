@@ -18,13 +18,9 @@ export class CreateAccount {
     async createAccountUser(): Promise<string> {
         await this.page.locator('#type option').first().waitFor({ state: 'attached' });
         await this.accountType.selectOption('0');
-
-        // #fromAccountId is populated via async JS — wait for it before selecting
         await this.page.locator('#fromAccountId option').first().waitFor({ state: 'attached' });
         await this.fromAccountId.selectOption({ index: 0 });
-
         await this.openAccount.click();
-
         await expect(this.accountId).toHaveText(/\d+/, { timeout: 10000 });
 
         const accountNumber = await this.accountId.textContent();

@@ -48,7 +48,5 @@ export class Register {
         await this.password.fill(userData.password);
         await this.confirm.fill(userData.password);
         await this.submit.click();
-        // await expect(this.page.locator("h1.title")).toContainText("Welcome")
-
     }
 }

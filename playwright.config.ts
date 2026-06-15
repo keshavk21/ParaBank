@@ -13,7 +13,7 @@ import { defineConfig, devices } from "@playwright/test";
  */
 export default defineConfig({
   testDir: "./tests",
-  outputDir: "./reports",
+  outputDir: "./screenshot",
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -27,8 +27,7 @@ export default defineConfig({
     ["html", { outputFolder: "playwright-report" }],
     ["allure-playwright", { outputFolder: "allure-results" }],
   ],
-  /* Global timeout per test — ParaBank's demo server can be slow */
-  timeout: 60000,
+
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
@@ -52,7 +51,6 @@ export default defineConfig({
     },
     {
       name: "chromium",
-      testMatch: /(?:ui|e2e)\/.*\.spec\.ts/,
       use: {
         ...devices["Desktop Chrome"],
         storageState: ".auth/user.json",
